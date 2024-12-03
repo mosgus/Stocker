@@ -1,5 +1,6 @@
-# Stocker - ## Stock portfolio evaluater 
-A project deloped by me (Gunnar B)
+# Stocker
+### Stock portfolio evaluater 
+financial software developed by me (Gunnar B)
 
 ## Description:
 A Stock portfolio evaluator 
