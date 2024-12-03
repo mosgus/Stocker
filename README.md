@@ -1,6 +1,5 @@
 # Stocker
-A stock portfolio evaluater 
-financial software developed by me (Gunnar B)
+A stock portfolio evaluater software developed by me (Gunnar B)
 
 ## Description:
 A Stock portfolio evaluator 
