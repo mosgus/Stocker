@@ -1,7 +1,5 @@
-Stocker - Stock portfolio evaluater 
+#Stocker - Stock portfolio evaluater 
 -
-Personal project developed by me
-
-Description:
+##Description:
 -----
 A Stock portfolio evaluator 
