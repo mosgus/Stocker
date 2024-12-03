@@ -1,5 +1,5 @@
-#Stocker - Stock portfolio evaluater 
+# Stocker - Stock portfolio evaluater 
 -
-##Description:
------
+## Description:
+-
 A Stock portfolio evaluator 
