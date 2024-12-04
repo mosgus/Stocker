@@ -3,6 +3,8 @@ import sys
 import glob
 import pandas as pd
 
+print("Running Stocker.py ↘️")
+
 def get_symbols_from_user():
     """
     Prompt user for symbols
@@ -65,3 +67,6 @@ if __name__ == "__main__":
     # Print the final list of symbols
     print("Consolidated list of stock symbols:")
     print(symbols) # TODO: remove dupes
+    print("List w/ out duplicates:")
+    symbols = list(set(symbol.strip() for symbol in symbols))
+    print(symbols)

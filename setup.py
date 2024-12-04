@@ -17,7 +17,7 @@ def validate_api_key(key):
     # Test usability with a small API call
     try:
         # Perform API call to validate the key
-        msg="Say 'yo' or 'hi'"
+        msg="Hello. Respond in two chars max"
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": msg}])
