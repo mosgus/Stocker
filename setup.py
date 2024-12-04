@@ -1,10 +1,14 @@
 from openai import OpenAI
 from openai import OpenAIError, AuthenticationError
+from newsapi import NewsApiClient
 import time
+import subprocess
 
 print("\nRunning Setup.py ↘️")
+print("Welcome to Stocker! 📉👁️📈")
+time.sleep(2) # for aesthetics
 
-def validate_api_key(key):
+def validate_gpt_key(key):
     client = OpenAI(api_key=key) # creates le usable api caller client
     """
     Validates the API key. Checks length and tests api call
@@ -17,12 +21,15 @@ def validate_api_key(key):
     # Test usability with a small API call
     try:
         # Perform API call to validate the key
-        msg="Hello. Respond in two chars max"
+        msg="Respond in 1 random emoji"
+        print("Querying GPT API...")
+        time.sleep(1)
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": msg}])
         if response and response.choices:
             reply = response.choices[0].message.content
+            time.sleep(1)
             print(f"GPT: {reply}")
             return True
     except AuthenticationError:
@@ -35,29 +42,36 @@ def validate_api_key(key):
     return False
 
 
-def get_api_key():
+def get_gpt_key():
     """
     Prompt the user to input their ChatGPT API key and validate it.
     """
-    print("Welcome to Stocker! 📉👁️📈")
-    time.sleep(2) # for aesthetics
-    key = input("Enter your ChatGPT API key: ").strip()
+    gpt_key = input("Enter your ChatGPT API key: ").strip()
 
-    if not key:
+    if not gpt_key:
         print("Error: API key cannot be empty.")
         return None
 
-    if validate_api_key(key):
-        print("✅API key successfully validated.")
-        return key
+    if validate_gpt_key(gpt_key):
+        print("GPT API key successfully validated ✅")
+        return gpt_key
     else:
         return None
 
-import subprocess
+def get_newsapi_key():
+    """
+    Prompt the user to input their NewsAPI key without validation.
+    """
+    newsapi_key = input("Enter your NewsAPI key: ").strip()
+    if not newsapi_key:
+        print("Error: NewsAPI key cannot be empty.")
+        return None
+    return newsapi_key
 
 if __name__ == "__main__":
-    key = get_api_key()
+    gpt_key = get_gpt_key()
+    newsapi_key = get_newsapi_key()
 
-    if key:
+    if gpt_key:
         print("Running main Stocker application...🏃‍♂️💨\n")
-        subprocess.run(["python", "Stocker.py", key])
+        subprocess.run(["python", "Stocker.py", gpt_key, newsapi_key])
