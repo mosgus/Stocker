@@ -2,8 +2,11 @@ import os
 import sys
 import glob
 import pandas as pd
+import subprocess
+import time
 
 print("Running Stocker.py ↘️")
+time.sleep(0.5)
 
 def get_symbols_from_user():
     """
@@ -42,9 +45,9 @@ if __name__ == "__main__":
         print("Error: API key not provided. Exiting...")
         sys.exit(1)
 
-    api_key = sys.argv[1]  # Retrieve the API keys passed from setup.py
+    gpt_key = sys.argv[1]  # Retrieve the API keys passed from setup.py
     newsapi_key = sys.argv[2]
-    print(f"GPT API key received: {api_key[:16]}...")
+    print(f"GPT API key received: {gpt_key[:16]}...")
     print(f"NewsAPI API Key: {newsapi_key[:16]}... ")
 
     # Get symbols from user input or CSV files
@@ -53,5 +56,10 @@ if __name__ == "__main__":
         symbols = get_symbols_from_csv()
 
     # Print the final list of symbols
+    time.sleep(0.5)
     symbols = list(set(symbol.strip() for symbol in symbols))
     print(f"Portfolio w/out dupes: {symbols}")
+    time.sleep(0.5)
+    print("Passing data to newsEval.py...📰")
+    time.sleep(1)
+    subprocess.run(["python", "newsEval.py", gpt_key, newsapi_key, *symbols])
