@@ -34,7 +34,7 @@ def validate_gpt_key(key):
             time.sleep(0.5)
             print(f"GPT: {reply}")
             time.sleep(0.5)
-            print("GPT API key successfully validated ✅")
+            print("GPT API key validated ✅")
             return True
     except AuthenticationError:
         print("Error: The API key is invalid or unauthorized.")
@@ -55,7 +55,7 @@ def validate_newsapi_key(key):
         print("Error: The NewsAPI key format is invalid. Ensure it is exactly 32 characters long.")
         return False
     time.sleep(0.5)
-    print("NewsAPI key format looks valid ✅")
+    print("NewsAPI key format validated ✅")
     time.sleep(0.5)
     return True
 
@@ -94,11 +94,11 @@ def get_newsapi_key():
 
 
 if __name__ == "__main__":
-    # Check for command-line arguments
+    # Check for command-line
     gpt_key = sys.argv[1] if len(sys.argv) > 1 else None
     newsapi_key = sys.argv[2] if len(sys.argv) > 2 else None
 
-    # Validate GPT key only once
+    # Validate GPT key
     if not gpt_key:
         gpt_key = get_gpt_key()
     else:
@@ -106,7 +106,7 @@ if __name__ == "__main__":
             print("Invalid GPT API key provided via command-line argument. Exiting...")
             sys.exit(1)
 
-    # Validate NewsAPI key only once
+    # Validate NewsAPI key
     if not newsapi_key:
         newsapi_key = get_newsapi_key()
     else:
