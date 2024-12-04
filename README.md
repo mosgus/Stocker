@@ -7,7 +7,7 @@ To run properly you must provide api keys for chatGPT and NewsAPI
 pip install openai
 pip install newsapi-python
 ```
---
+-
 Be aware, using ' openai migrate ' may cause issues depending on your OS. 
 It's recommended to use ' grit apply openai ' for modifying the code to best.
 
