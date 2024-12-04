@@ -2,7 +2,7 @@
 A stock portfolio evaluater software developed by me (Gunnar B)
 
 ### Dependencies
-To run properly you must provide api keys for chatGPT and NewsAPI( users are prompted to enter keys via console )
+To run properly you must provide api keys for chatGPT and NewsAPI
 ```bash
 pip install openai
 pip install newsapi-python
