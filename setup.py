@@ -1,28 +1,29 @@
 from openai import OpenAI
-
-
 from openai import OpenAIError, AuthenticationError
+import time
 
-def validate_api_key(api_key):
-    client = OpenAI(api_key=api_key) # creates le usable api caller client
+print("\nRunning Setup.py ↘️")
+
+def validate_api_key(key):
+    client = OpenAI(api_key=key) # creates le usable api caller client
     """
     Validates the API key. Checks length and tests api call
     """
     # Check length and format
-    if not api_key.startswith("sk-") or len(api_key) < 30:
+    if not key.startswith("sk-") or len(key) < 30:
         print("Error: The API key format is invalid. Ensure it starts with 'sk-' and is at least 30 characters long.")
         return False
 
     # Test usability with a small API call
     try:
         # Perform API call to validate the key
-        msg="Hello. Respond in two chars max."
+        msg="Say 'yo' or 'hi'"
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": msg}])
         if response and response.choices:
             reply = response.choices[0].message.content
-            print(f"ChatGPT's response: {reply}")
+            print(f"GPT: {reply}")
             return True
     except AuthenticationError:
         print("Error: The API key is invalid or unauthorized.")
@@ -38,23 +39,25 @@ def get_api_key():
     """
     Prompt the user to input their ChatGPT API key and validate it.
     """
-    print("\nWelcome to Stocker!")
-    print("Please paste your ChatGPT API key when prompted.")
-    api_key = input("Enter your ChatGPT API key: ").strip()
+    print("Welcome to Stocker! 📉👁️📈")
+    time.sleep(2) # for aesthetics
+    key = input("Enter your ChatGPT API key: ").strip()
 
-    if not api_key:
+    if not key:
         print("Error: API key cannot be empty.")
         return None
 
-    if validate_api_key(api_key):
-        print("API key successfully validated.")
-        return api_key
+    if validate_api_key(key):
+        print("✅API key successfully validated.")
+        return key
     else:
         return None
 
+import subprocess
 
 if __name__ == "__main__":
-    api_key = get_api_key()
+    key = get_api_key()
 
-    if api_key:
-        print("Running main Stocker application...")
+    if key:
+        print("Running main Stocker application...🏃‍♂️💨\n")
+        subprocess.run(["python", "Stocker.py", key])
