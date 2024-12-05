@@ -4,7 +4,7 @@ import time
 from newsapi import NewsApiClient
 from textblob import TextBlob
 
-print("\nRunning newsGetter.py ↘️")
+print("\nRunning newsAnalysis.py ↘️")
 time.sleep(0.5)
 
 
