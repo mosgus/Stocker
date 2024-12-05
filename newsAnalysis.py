@@ -85,7 +85,7 @@ def gpt_analysis(gpt_key, stock, articles):
             f"You are an expert financial analyst. Analyze the following news articles about {stock}. "
             "Provide a single paragraph summarizing the overall sentiment and context of the articles. "
             "Focus on key themes and trends rather than individual article summaries. "
-            "Based on your analysis, assign a sentiment score ranging from -5 (very negative) to 5 (very positive), 0 being neutal "
+            "Based on your analysis, assign a sentiment score ranging from -5 (very negative) to 5 (very positive), 0 being neutral "
             "that reflects the collective sentiment on this stock's growth potential. Don't be conservative with negative sentiment."
             "State this sentiment score on a new line and as the last output of your response."
             "(ex: GPT Sentiment Score: -2\n"
