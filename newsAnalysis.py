@@ -3,6 +3,7 @@ import yfinance as yf
 import time
 from newsapi import NewsApiClient
 from textblob import TextBlob
+from openai import OpenAI
 
 print("\nRunning newsAnalysis.py ↘️")
 time.sleep(0.5)
@@ -72,6 +73,40 @@ def analyze_sentiment(title):
         return 0  # Neutral sentiment
 
 
+def gpt_analysis(gpt_key, stock, articles):
+    """
+    Uses GPT API to summarize articles and provide a sentiment score for the stock.
+    """
+    client = OpenAI(api_key=gpt_key)
+    try:
+
+        #titles = "\n".join([f"{i + 1}. {article['title']}" for i, article in enumerate(articles)])
+        prompt = (
+            f"You are an expert financial analyst. Analyze the following news articles about {stock}. "
+            "Provide a single paragraph summarizing the overall sentiment and context of the articles. "
+            "Focus on key themes and trends rather than individual article summaries. "
+            "Based on your analysis, assign a sentiment score ranging from -5 (very negative) to 5 (very positive) "
+            "that reflects the collective sentiment on this stock's growth potential."
+            "State this sentiment score on a new line and as the last output of your response"
+            "(ex: GPT Sentiment Score: -2\n"
+            f"{articles}"
+        )
+
+        # Query GPT API
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        if response and response.choices:
+            gpt_response = response.choices[0].message.content
+            return gpt_response
+        else:
+            return "Error: GPT did not return a response."
+    except Exception as e:
+        return f"Error querying GPT: {e}"
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 4:
         print("Error: Insufficient arguments provided. Exiting...")
@@ -103,8 +138,13 @@ if __name__ == "__main__":
             title = article['title']
             score = analyze_sentiment(title)
             total_score += score  # Accumulate the sentiment score
-            print(f"  {i}. {title} - {article['url']} [Sentiment Score: {score}]")
+            print(f"  {i}. {title} - {article['url']} - [Sentiment Score: {score}]")
 
         # Print the total sentiment score for all articles
         print(f"TextBlob Sentiment Score for {entry}: {total_score}")
+
+        # Use GPT for a generalized analysis
+        print("\nGPT Analysis:")
+        gpt_response = gpt_analysis(gpt_key, entry, articles)
+        print(gpt_response)
         time.sleep(0.5)
