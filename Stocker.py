@@ -60,6 +60,6 @@ if __name__ == "__main__":
     symbols = list(set(symbol.strip() for symbol in symbols))
     print(f"Portfolio w/out dupes: {symbols}")
     time.sleep(0.5)
-    print("Passing data to newsGetter.py...📰")
+    print("Passing data to newsAnalysis.py...📰")
     time.sleep(1)
-    subprocess.run(["python", "newsGetter.py", gpt_key, newsapi_key, *symbols])
+    subprocess.run(["python", "newsAnalysis.py", gpt_key, newsapi_key, *symbols])

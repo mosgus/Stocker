@@ -2,9 +2,11 @@ import sys
 import yfinance as yf
 import time
 from newsapi import NewsApiClient
+from textblob import TextBlob
 
 print("\nRunning newsGetter.py ↘️")
 time.sleep(0.5)
+
 
 def get_company_names(symbols):
     """
@@ -17,7 +19,6 @@ def get_company_names(symbols):
             company_names[symbol] = ticker.info.get('shortName', 'Unknown Company')
         except Exception as e:
             print(f"Error fetching data for {symbol}: {e}")
-            company_names[symbol] = 'Unknown Company'
     return company_names
 
 
@@ -31,17 +32,13 @@ def make_names_list(symbols):
     return nameList
 
 
-def get_stock_news(newsapi_key, stock, max_articles=5):
+def get_stock_news(newsapi_key, stock, max_articles):
     """
     Fetches up to `max_articles` news article titles and URLs for the specified stock symbol.
     """
     try:
-        # Initialize the NewsAPI client
         newsapi = NewsApiClient(api_key=newsapi_key)
-
-        # Construct the query string
         query = f"{stock}"
-
         # Fetch news articles for the stock symbol
         all_articles = newsapi.get_everything(
             q=query,
@@ -59,6 +56,20 @@ def get_stock_news(newsapi_key, stock, max_articles=5):
     except Exception as e:
         print(f"Error fetching news for {stock}: {e}")
         return []
+
+
+def analyze_sentiment(title):
+    """
+    Analyzes the sentiment of a news title and returns a score:
+    -1 for negative sentiment, 0 for neutral, and 1 for positive sentiment.
+    """
+    sentiment = TextBlob(title).sentiment.polarity
+    if sentiment > 0.1:
+        return 1  # Positive sentiment
+    elif sentiment < -0.1:
+        return -1  # Negative sentiment
+    else:
+        return 0  # Neutral sentiment
 
 
 if __name__ == "__main__":
@@ -80,14 +91,20 @@ if __name__ == "__main__":
     time.sleep(1)
     for entry in nameList:
         # Use the full "Name (Symbol)" format for the query
-        print(f"    Top articles related to {entry}:")
+        print(f"\nTop articles related to {entry}:")
 
         # Get news articles
         articles = get_stock_news(newsapi_key, entry, max_articles=5)
 
-        # Print the articles
+        total_score = 0  # Initialize total score as 0
+        # Print the articles with sentiment scores
         for i, article in enumerate(articles, start=1):
             time.sleep(0.2)
-            print(f"      {i}. {article['title']} - {article['url']}")
+            title = article['title']
+            score = analyze_sentiment(title)
+            total_score += score  # Accumulate the sentiment score
+            print(f"  {i}. {title} - {article['url']} [Sentiment Score: {score}]")
 
+        # Print the total sentiment score for all articles
+        print(f"TextBlob Sentiment Score for {entry}: {total_score}")
         time.sleep(0.5)
