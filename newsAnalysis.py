@@ -33,9 +33,9 @@ def make_names_list(symbols):
     return nameList
 
 
-def get_stock_news(newsapi_key, stock, max_articles):
+def get_stock_news(newsapi_key, stock):
     """
-    Fetches up to `max_articles` news article titles and URLs for the specified stock symbol.
+    Fetches news article titles and URLs for the specified stock symbol.
     """
     try:
         newsapi = NewsApiClient(api_key=newsapi_key)
@@ -45,12 +45,15 @@ def get_stock_news(newsapi_key, stock, max_articles):
             q=query,
             language="en",
             sort_by="relevancy",
-            page_size=max_articles,
+            page_size= 5,
         )
 
         # Extract and return article titles and URLs
         articles = [
-            {"title": article['title'], "url": article['url']}
+            {
+                "title": article['title'],
+                "description": article.get('description', 'No description available.'),
+                "url": article['url']}
             for article in all_articles.get('articles', [])
         ]
         return articles
@@ -59,7 +62,7 @@ def get_stock_news(newsapi_key, stock, max_articles):
         return []
 
 
-def analyze_sentiment(title):
+def tb_sentiment(title):
     """
     Analyzes the sentiment of a news title and returns a score:
     -1 for negative sentiment, 0 for neutral, and 1 for positive sentiment.
@@ -79,8 +82,10 @@ def gpt_analysis(gpt_key, stock, articles):
     """
     client = OpenAI(api_key=gpt_key)
     try:
-
-        #titles = "\n".join([f"{i + 1}. {article['title']}" for i, article in enumerate(articles)])
+        formatted_articles = "\n".join([
+            f"{i + 1}. Title: {article['title']}\n   Description: {article['description']}\n   URL: {article['url']}"
+            for i, article in enumerate(articles)
+        ])
         prompt = (
             f"You are an expert financial analyst. Analyze the following news articles about {stock}. "
             "Provide a single paragraph summarizing the overall sentiment and context of the articles. "
@@ -89,7 +94,7 @@ def gpt_analysis(gpt_key, stock, articles):
             "that reflects the collective sentiment on this stock's growth potential. Don't be conservative with negative sentiment."
             "State this sentiment score on a new line and as the last output of your response."
             "(ex: GPT Sentiment Score: -2\n"
-            f"{articles}"
+            f"{formatted_articles}"
         )
 
         # Query GPT API
@@ -122,26 +127,29 @@ if __name__ == "__main__":
     nameList = make_names_list(symbols)
 
     # Fetch news for each company in the name list
-    print("Fetching news articles for each company...")
+    print("Fetching news articles for each company and analyzing sentiment...")
     time.sleep(1)
     for entry in nameList:
         # Use the full "Name (Symbol)" format for the query
         print(f"\nTop articles related to {entry}:")
 
         # Get news articles
-        articles = get_stock_news(newsapi_key, entry, max_articles=5)
+        articles = get_stock_news(newsapi_key, entry)
 
-        total_score = 0  # Initialize total score as 0
-        # Print the articles with sentiment scores
+        tbTotal_score = 0  # Initialize tb total score as 0
+
+        # Print the articles with textblob sentiment scores
         for i, article in enumerate(articles, start=1):
             time.sleep(0.2)
-            title = article['title']
-            score = analyze_sentiment(title)
-            total_score += score  # Accumulate the sentiment score
-            print(f"  {i}. {title} - {article['url']} - [Sentiment Score: {score}]")
+            tb_score = tb_sentiment(article['title'])
+            tbTotal_score += tb_score  # Accumulate the sentiment score
+            print(f"  {i}. {article['title']} "
+                  f"\n      ℹ - {article['description']}"
+                  f"\n      {article['url']} "
+                  f"\n      [Sentiment Score: {tb_score}]")
 
         # Print the total sentiment score for all articles
-        print(f"TextBlob Sentiment Score for {entry}: {total_score}")
+        print(f"TextBlob Sentiment Score for {entry}: {tbTotal_score}")
 
         # Use GPT for a generalized analysis
         print("\nGPT Analysis:")
