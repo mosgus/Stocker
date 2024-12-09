@@ -4,6 +4,8 @@ import time
 from newsapi import NewsApiClient
 from textblob import TextBlob
 from openai import OpenAI
+import csv
+import os
 
 print("\nRunning newsAnalysis.py ↘️")
 time.sleep(0.5)
@@ -28,7 +30,8 @@ def make_names_list(symbols):
     Creates a list of formatted names as "Name (Symbol)" for a list of stock symbols.
     """
     company_names = get_company_names(symbols)  # Fetch company names for the symbols
-    nameList = [f"{name} ({symbol})" for symbol, name in company_names.items()]  # Create a list of formatted names
+    nameList = [f"{name}({symbol})" for symbol, name in company_names.items()]  # Create a list of formatted names
+    #nameList = [f"{name}" for symbol, name in company_names.items()] # without the symbol( for query testing )
     print(f"Company Names: {nameList}")  # Print the list of company names
     return nameList
 
@@ -82,19 +85,15 @@ def gpt_analysis(gpt_key, stock, articles):
     """
     client = OpenAI(api_key=gpt_key)
     try:
-        formatted_articles = "\n".join([
-            f"{i + 1}. Title: {article['title']}\n   Description: {article['description']}\n   URL: {article['url']}"
-            for i, article in enumerate(articles)
-        ])
         prompt = (
             f"You are an expert financial analyst. Analyze the following news articles about {stock}. "
             "Provide a single paragraph summarizing the overall sentiment and context of the articles. "
             "Focus on key themes and trends rather than individual article summaries. "
-            "Based on your analysis, assign a sentiment score ranging from -5 (very negative) to 5 (very positive), 0 being neutral "
+            "Based on your analysis, assign a sentiment score ranging from -5 (very negative) to 5 (very positive), 0 (neutral) "
             "that reflects the collective sentiment on this stock's growth potential. Don't be conservative with negative sentiment."
             "State this sentiment score on a new line and as the last output of your response."
-            "(ex: GPT Sentiment Score: -2\n"
-            f"{formatted_articles}"
+            "(ex: GPT Sentiment Score for NETGEAR, Inc.(NTGR): -2\n"
+            f"{articles}"
         )
 
         # Query GPT API
@@ -111,6 +110,19 @@ def gpt_analysis(gpt_key, stock, articles):
     except Exception as e:
         return f"Error querying GPT: {e}"
 
+def extract_gpt_score(response):
+    """
+    Extracts the sentiment score from GPT's response.
+    """
+    try:
+        lines = response.splitlines()
+        for line in reversed(lines):
+            if "GPT Sentiment Score" in line:
+                score = line.split(":")[-1].strip()
+                return int(score)
+    except ValueError:
+        print("Error parsing GPT sentiment score.")
+    return None
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
@@ -125,35 +137,57 @@ if __name__ == "__main__":
 
     # Generate a list of company names with symbols
     nameList = make_names_list(symbols)
+    output_file = os.path.join("scores", "newsScores.csv")
 
-    # Fetch news for each company in the name list
-    print("Fetching news articles for each company and analyzing sentiment...")
-    time.sleep(1)
-    for entry in nameList:
-        # Use the full "Name (Symbol)" format for the query
-        print(f"\nTop articles related to {entry}:")
+    # Prepare the CSV file
+    with open(output_file, mode="w", newline="", encoding="utf-8") as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(["Stock", "TextBlob Score", "GPT Score"])  # Write the header row
 
-        # Get news articles
-        articles = get_stock_news(newsapi_key, entry)
+        # Fetch news for each company in the name list
+        print("Fetching news articles for each company and analyzing sentiment...")
+        time.sleep(1)
 
-        tbTotal_score = 0  # Initialize tb total score as 0
+        for entry in nameList:
+            # Use the full "Name (Symbol)" format for the query
+            print(f"\nTop articles related to {entry}:")
+            symbol = entry.split("(")[-1].strip(")")  # Extract the symbol from "Name (Symbol)"
+            articles = get_stock_news(newsapi_key, entry) # Get news articles
 
-        # Print the articles with textblob sentiment scores
-        for i, article in enumerate(articles, start=1):
-            time.sleep(0.2)
-            tb_score = tb_sentiment(article['title'])
-            tbTotal_score += tb_score  # Accumulate the sentiment score
-            print(f"  {i}. {article['title']} "
-                  f"\n      ℹ - {article['description']}"
-                  f"\n      {article['url']} "
-                  f"\n      [Sentiment Score: {tb_score}]")
+            # Calculate TextBlob total sentiment score
+            tbTotal_score = 0
+            for i, article in enumerate(articles, start=1):
+                time.sleep(0.2)
+                tb_score = tb_sentiment(article['title'])
+                tbTotal_score += tb_score  # Accumulate the TextBlob sentiment score
+                print(f"  {i}. {article['title']} "
+                      f"\n      ℹ - {article['description']}"
+                      f"\n      {article['url']} "
+                      f"\n      [Sentiment Score: {tb_score}]")
 
-        # Print the total sentiment score for all articles
-        print(f"TextBlob Sentiment Score for {entry}: {tbTotal_score}")
+            # Print the TextBlob sentiment score
+            print(f"\nTextBlob Sentiment Score for {entry}: {tbTotal_score}")
 
-        # Use GPT for a generalized analysis
-        print("\nGPT Analysis:")
-        gpt_response = gpt_analysis(gpt_key, entry, articles)
-        print(gpt_response)
-        print(f"Done with News Sentiment Analysis for {entry}.✅")
-        time.sleep(0.5)
+            # GPT Analysis
+            print("\nGPT Analysis:")
+            gpt_response = gpt_analysis(gpt_key, entry, articles)
+            print(gpt_response)
+
+            # Extract GPT Sentiment Score
+            try:
+                gpt_score = None
+                for line in reversed(gpt_response.splitlines()):
+                    if "GPT Sentiment Score" in line:
+                        gpt_score = int(line.split(":")[-1].strip())
+                        break
+            except ValueError:
+                print(f"Error parsing GPT sentiment score for {entry}.")
+                gpt_score = None
+
+            # Write the scores to the CSV file
+            writer.writerow([symbol, tbTotal_score, gpt_score])
+
+            print(f"\nDone with News Sentiment Analysis for {entry}✅")
+            time.sleep(0.5)
+
+    print(f"Sentiment scores saved to {output_file}")
