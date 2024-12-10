@@ -40,6 +40,27 @@ def get_symbols_from_csv(directory="symbol_lists"):
 
     return list(all_symbols)
 
+def news_Anal(gpt_key, newsapi_key, symbols_list):
+    subprocess.run(["python", "newsAnalysis.py", gpt_key, newsapi_key, *symbols_list])
+    time.sleep(1)
+
+def metrics_Anal(gpt_key, symbols_list):
+    """
+    Prompt the user to decide whether to continue to metrics analysis or exit.
+     """
+    cont = 1
+    while cont:
+        choice = input("Enter [y] to continue to metric analysis or [n] to exit: ").strip().lower()
+        if choice in ("y", "n"):
+            if choice == "y":
+                print("Passing data to metricsAnalysis.py...📊")
+                subprocess.run(["python", "metricsAnalysis.py", gpt_key, *symbols_list])
+            else:
+                print("Exiting. Buenos! 👋🤓")
+            break
+        print("Invalid input. Please enter 'y' or 'n'.")
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         print("Error: API key not provided. Exiting...")
@@ -61,5 +82,7 @@ if __name__ == "__main__":
     print(f"Portfolio w/out dupes: {symbols}")
     time.sleep(0.5)
     print("Passing data to newsAnalysis.py...📰")
-    time.sleep(1)
-    subprocess.run(["python", "newsAnalysis.py", gpt_key, newsapi_key, *symbols])
+    news_Anal(gpt_key, newsapi_key, symbols)
+    print(f"\n🗞️News sentiment analysis for {symbols} has completed. 🗞")
+    metrics_Anal(gpt_key, symbols)
+

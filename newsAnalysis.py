@@ -125,11 +125,7 @@ def extract_gpt_score(response):
     return None
 
 if __name__ == "__main__":
-    if len(sys.argv) < 4:
-        print("Error: Insufficient arguments provided. Exiting...")
-        sys.exit(1)
-
-    # Extract API keys and symbols passed as command-line arguments
+    # Extract API keys and symbols
     gpt_key = sys.argv[1]
     newsapi_key = sys.argv[2]
     symbols = sys.argv[3:]
@@ -137,11 +133,9 @@ if __name__ == "__main__":
 
     # Generate a list of company names with symbols
     nameList = make_names_list(symbols)
-
+    # Prepare the CSV file
     score_file = os.path.join("analysis", "newsAnalysis.csv")
 
-    # Prepare the CSV file
-    # Prepare the analysis CSV file
     with open(score_file, mode="w", newline="", encoding="utf-8") as scores_csv:
 
         score_writer = csv.writer(scores_csv)
@@ -196,9 +190,3 @@ if __name__ == "__main__":
 
             print(f"\nDone with News Sentiment Analysis for {entry}✅")
             time.sleep(0.5)
-
-    #print(f"Sentiment analysis saved to {score_file}")
-    #print(f"GPT analysis saved to {analysis_file}") # for testing the file generation
-
-
-
