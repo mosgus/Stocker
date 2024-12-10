@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d697f109-98c8-4ccd-9f46-4fb0f700379c" name="Changes" comment="Basic typos fixed">
+    <list default="true" id="d697f109-98c8-4ccd-9f46-4fb0f700379c" name="Changes" comment="Implemented score saving. TextBlob and GPT sentiment scores for each stock get saved into a csv file called newsScores.csv.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/newsAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/newsAnalysis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +88,7 @@
       <workItem from="1733268472869" duration="48699000" />
       <workItem from="1733425774567" duration="90000" />
       <workItem from="1733696793888" duration="305000" />
-      <workItem from="1733697113645" duration="4754000" />
+      <workItem from="1733697113645" duration="16057000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Setup">
       <option name="closed" value="true" />
@@ -179,7 +178,23 @@
       <option name="project" value="LOCAL" />
       <updated>1733425856464</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Included article descriptions into the News Sentiment outputs as well as into the GPT queries for more precise analysis.">
+      <option name="closed" value="true" />
+      <created>1733702143981</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1733702143981</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Implemented score saving. TextBlob and GPT sentiment scores for each stock get saved into a csv file called newsScores.csv.">
+      <option name="closed" value="true" />
+      <created>1733788453233</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1733788453233</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,7 +212,9 @@
     <MESSAGE value="Some basic cleanup. About to integrate GPT analysis." />
     <MESSAGE value="Succesfully implemented GPT analysis of New Articles." />
     <MESSAGE value="Basic typos fixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic typos fixed" />
+    <MESSAGE value="Included article descriptions into the News Sentiment outputs as well as into the GPT queries for more precise analysis." />
+    <MESSAGE value="Implemented score saving. TextBlob and GPT sentiment scores for each stock get saved into a csv file called newsScores.csv." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented score saving. TextBlob and GPT sentiment scores for each stock get saved into a csv file called newsScores.csv." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Stocker$newsapiTEST.coverage" NAME="newsapiTEST Coverage Results" MODIFIED="1733351173820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

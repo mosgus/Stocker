@@ -137,35 +137,43 @@ if __name__ == "__main__":
 
     # Generate a list of company names with symbols
     nameList = make_names_list(symbols)
-    output_file = os.path.join("scores", "newsScores.csv")
+    score_file = os.path.join("scores", "newsScores.csv")
+    analysis_file = os.path.join("GPTanalysis", "newsAnal.csv")
 
     # Prepare the CSV file
-    with open(output_file, mode="w", newline="", encoding="utf-8") as csv_file:
-        writer = csv.writer(csv_file)
-        writer.writerow(["Stock", "TextBlob Score", "GPT Score"])  # Write the header row
+    # Prepare the scores CSV file
+    with open(score_file, mode="w", newline="", encoding="utf-8") as scores_csv, \
+            open(analysis_file, mode="w", newline="", encoding="utf-8") as analysis_csv:
+
+        score_writer = csv.writer(scores_csv)
+        analysis_writer = csv.writer(analysis_csv)
+
+        # Write headers to both CSV files
+        score_writer.writerow(["Stock", "TextBlob Score", "GPT Score"])
+        analysis_writer.writerow(["Stock", "Analysis"])
 
         # Fetch news for each company in the name list
         print("Fetching news articles for each company and analyzing sentiment...")
         time.sleep(1)
 
         for entry in nameList:
-            # Use the full "Name (Symbol)" format for the query
             print(f"\nTop articles related to {entry}:")
-            symbol = entry.split("(")[-1].strip(")")  # Extract the symbol from "Name (Symbol)"
-            articles = get_stock_news(newsapi_key, entry) # Get news articles
+            symbol = entry.split("(")[-1].strip(")")  # Extract the stock symbol
+
+            # Fetch news articles
+            articles = get_stock_news(newsapi_key, entry)
 
             # Calculate TextBlob total sentiment score
             tbTotal_score = 0
             for i, article in enumerate(articles, start=1):
                 time.sleep(0.2)
                 tb_score = tb_sentiment(article['title'])
-                tbTotal_score += tb_score  # Accumulate the TextBlob sentiment score
+                tbTotal_score += tb_score  # Accumulate TextBlob sentiment score
                 print(f"  {i}. {article['title']} "
                       f"\n      ℹ - {article['description']}"
                       f"\n      {article['url']} "
                       f"\n      [Sentiment Score: {tb_score}]")
 
-            # Print the TextBlob sentiment score
             print(f"\nTextBlob Sentiment Score for {entry}: {tbTotal_score}")
 
             # GPT Analysis
@@ -174,20 +182,26 @@ if __name__ == "__main__":
             print(gpt_response)
 
             # Extract GPT Sentiment Score
+            gpt_score = None
+            gpt_analysis_text = gpt_response
             try:
-                gpt_score = None
                 for line in reversed(gpt_response.splitlines()):
                     if "GPT Sentiment Score" in line:
-                        gpt_score = int(line.split(":")[-1].strip())
+                        gpt_score = int(line.split(":")[-1].strip()) # Extract info proceeding "Sentiment Score:"
+                        gpt_analysis_text = gpt_response.replace(line, "").strip() # Remove the sentiment score from the analysis text
                         break
             except ValueError:
                 print(f"Error parsing GPT sentiment score for {entry}.")
                 gpt_score = None
 
-            # Write the scores to the CSV file
-            writer.writerow([symbol, tbTotal_score, gpt_score])
+            # Write to the scores CSV
+            score_writer.writerow([symbol, tbTotal_score, gpt_score])
+
+            # Write to the analysis CSV
+            analysis_writer.writerow([symbol, gpt_analysis_text])
 
             print(f"\nDone with News Sentiment Analysis for {entry}✅")
             time.sleep(0.5)
 
-    print(f"Sentiment scores saved to {output_file}")
+    print(f"Sentiment scores saved to {score_file}")
+    print(f"GPT analysis saved to {analysis_file}")
