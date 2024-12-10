@@ -26,7 +26,7 @@ def validate_gpt_key(key):
         print("Querying GPT API...")
         time.sleep(0.25)
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o-mini-2024-07-18",
             messages=[{"role": "user", "content": msg}]
         )
         if response and response.choices:

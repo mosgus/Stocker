@@ -7,6 +7,8 @@ from openai import OpenAI
 import csv
 import os
 
+import pandas as pd
+
 print("\nRunning newsAnalysis.py ↘️")
 time.sleep(0.5)
 
@@ -64,7 +66,6 @@ def get_stock_news(newsapi_key, stock):
         print(f"Error fetching news for {stock}: {e}")
         return []
 
-
 def tb_sentiment(title):
     """
     Analyzes the sentiment of a news title and returns a score:
@@ -77,7 +78,6 @@ def tb_sentiment(title):
         return -1  # Negative sentiment
     else:
         return 0  # Neutral sentiment
-
 
 def gpt_analysis(gpt_key, stock, articles):
     """
@@ -98,7 +98,7 @@ def gpt_analysis(gpt_key, stock, articles):
 
         # Query GPT API
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o-mini-2024-07-18",
             messages=[{"role": "user", "content": prompt}]
         )
 
@@ -137,20 +137,17 @@ if __name__ == "__main__":
 
     # Generate a list of company names with symbols
     nameList = make_names_list(symbols)
-    score_file = os.path.join("scores", "newsScores.csv")
-    analysis_file = os.path.join("GPTanalysis", "newsAnal.csv")
+
+    score_file = os.path.join("analysis", "newsAnalysis.csv")
 
     # Prepare the CSV file
-    # Prepare the scores CSV file
-    with open(score_file, mode="w", newline="", encoding="utf-8") as scores_csv, \
-            open(analysis_file, mode="w", newline="", encoding="utf-8") as analysis_csv:
+    # Prepare the analysis CSV file
+    with open(score_file, mode="w", newline="", encoding="utf-8") as scores_csv:
 
         score_writer = csv.writer(scores_csv)
-        analysis_writer = csv.writer(analysis_csv)
 
         # Write headers to both CSV files
-        score_writer.writerow(["Stock", "TextBlob Score", "GPT Score"])
-        analysis_writer.writerow(["Stock", "Analysis"])
+        score_writer.writerow(["Stock", "TextBlob Score", "GPT Score", "GPT-Analysis"])
 
         # Fetch news for each company in the name list
         print("Fetching news articles for each company and analyzing sentiment...")
@@ -194,14 +191,14 @@ if __name__ == "__main__":
                 print(f"Error parsing GPT sentiment score for {entry}.")
                 gpt_score = None
 
-            # Write to the scores CSV
-            score_writer.writerow([symbol, tbTotal_score, gpt_score])
-
             # Write to the analysis CSV
-            analysis_writer.writerow([symbol, gpt_analysis_text])
+            score_writer.writerow([symbol, tbTotal_score, gpt_score, gpt_analysis_text])
 
             print(f"\nDone with News Sentiment Analysis for {entry}✅")
             time.sleep(0.5)
 
-    print(f"Sentiment scores saved to {score_file}")
-    print(f"GPT analysis saved to {analysis_file}")
+    #print(f"Sentiment analysis saved to {score_file}")
+    #print(f"GPT analysis saved to {analysis_file}") # for testing the file generation
+
+
+
