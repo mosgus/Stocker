@@ -19,10 +19,15 @@ def gpt_risk_analysis(symbol, beta, sharpe_ratio, volatility, gpt_key):
             f"- Beta: {beta}\n"
             f"- Volatility: {volatility}\n"
             f"- Sharpe Ratio: {sharpe_ratio}\n"
-            "Provide a short paragraph discussing the implications of these metrics. Discuss the stock's risk and return profile based on these metrics. "
-            "Finally, assign a 'risk score' between 1 (very low risk) and 5 (very high risk). "
-            "State this risk score on a new line and as the last output of your response."
-            "(ex: GPT Risk Score for NETGEAR, Inc.(NTGR): 2"
+            "Provide a short paragraph discussing the implications of these metrics. Discuss the stock's risk and return profile based on these metrics."
+            "Finally, assign a 'risk score' between 1 (very low risk) and 5 (very high risk) based on the following criteria:\n"
+            "- **1 (very low risk)**: Stocks with low beta, low volatility, and consistent Sharpe Ratio indicating strong returns relative to low risk, such as utility or consumer defensive stocks.\n"
+            "- **2 (low risk)**: Stocks with slightly higher volatility or beta but generally stable performance and low risk, such as large-cap blue-chip stocks.\n"
+            "- **3 (moderate risk)**: Stocks with mixed metrics, such as medium volatility and beta, indicating average market risk and return profiles.\n"
+            "- **4 (high risk)**: Stocks with high beta or volatility, suggesting significant market sensitivity and a potential for large swings in price.\n"
+            "- **5 (very high risk)**: Stocks with extremely high beta, high volatility, and low Sharpe Ratios, indicating poor compensation for risk or very speculative investments, such as early-stage tech or meme stocks.\n"
+            "Be decisive in assigning scores and avoid clustering around 2 and 4."
+            "\nONLY AND ALWAYS State this risk score on a new line and as the last output of your response (e.g., '<newline>GPT Risk Score for NETGEAR, Inc.(NTGR): 2')."
         )
 
         # Query GPT API
@@ -131,12 +136,17 @@ if __name__ == "__main__":
     for symbol in symbols:
         print(f"\nAnalyzing metrics for {symbol}...")
         metrics = calculate_metrics(symbol, sp500_data, rf_rate, gpt_key)
-
-        # Display shortened GPT Analysis in console
-        print(f"Metrics for {symbol}: {metrics}")
-
         metrics_list.append(metrics)
-
+        # Display metrics
+        relevant_metrics = {
+            "Symbol": metrics["Symbol"],
+            "Beta": metrics["Beta"],
+            "Volatility": metrics["Volatility"],
+            "Sharpe Ratio": metrics["Sharpe Ratio"],
+            "GPT Risk Score": metrics["GPT Risk Score"]
+        }
+        print(f"📊Metrics for {symbol}: {relevant_metrics}")
+        print(f"🤖GPT Analysis for {symbol}: {metrics['GPT Analysis']}")
     # Save metrics to CSV
     os.makedirs("analysis", exist_ok=True)
     output_file = "analysis/metricsAnalysis.csv"
