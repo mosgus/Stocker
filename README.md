@@ -16,6 +16,9 @@ Either simply run setup.py and provide api keys when prompted or run setup.py wi
 - Example:
   ```bash
   python setup.py
+  ```
+  OR
+  ```bash
   python setup.py <chatGPT API key> <NewsAPI key>
   ```
 
