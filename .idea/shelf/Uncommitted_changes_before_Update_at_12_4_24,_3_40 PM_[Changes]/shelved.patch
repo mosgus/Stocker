@@ -1,0 +1,165 @@
+Index: newsapiTEST.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/newsapiTEST.py b/newsapiTEST.py
+new file mode 100644
+--- /dev/null	(date 1733344647913)
++++ b/newsapiTEST.py	(date 1733344647913)
+@@ -0,0 +1,42 @@
++from newsapi import NewsApiClient
++
++# Initialize the NewsAPI client
++newsapi = NewsApiClient(api_key='181d529bbcd0468ca953ce83cee86f9f')
++
++
++def get_stock_news(stock, company_name=None, max_articles=10):
++    """
++    Fetches up to `max_articles` news article titles and URLs for the specified stock symbol.
++    Tries to narrow down the results using the company name and additional filters.
++    """
++    try:
++
++        query = f"{stock}"
++
++        # Fetch news articles for the stock symbol
++        all_articles = newsapi.get_everything(
++            q=query,
++            language="en",
++            sort_by="relevancy",
++            page_size=max_articles,
++            )
++
++        # Extract and return article titles and URLs
++        articles = [
++            {"title": article['title'], "url": article['url']}
++            for article in all_articles.get('articles', [])
++        ]
++        return articles
++    except Exception as e:
++        print(f"Error fetching news for {stock}: {e}")
++        return []
++
++
++# Example usage: Fetch and print news for GM
++stock = "General Motors Company(GM)"
++max_articles = 10
++print(f"Top articles for {stock}:")
++
++articles = get_stock_news(stock, max_articles)
++for i, article in enumerate(articles, start=1):
++    print(f"{i}. {article['title']} - {article['url']}")
+\ No newline at end of file
+Index: stockNameTESTER.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/stockNameTESTER.py b/stockNameTESTER.py
+new file mode 100644
+--- /dev/null	(date 1733344002644)
++++ b/stockNameTESTER.py	(date 1733344002644)
+@@ -0,0 +1,22 @@
++import yfinance as yf
++
++def get_company_names(symbols):
++    """
++    Retrieves company names for the given list of stock symbols.
++    """
++    company_names = {}
++    for symbol in symbols:
++        try:
++            ticker = yf.Ticker(symbol)
++            company_names[symbol] = ticker.info.get('shortName', 'Unknown Company')
++        except Exception as e:
++            print(f"Error fetching data for {symbol}: {e}")
++            company_names[symbol] = 'Unknown Company'
++    return company_names
++
++# Example usage
++symbols = ['DE', 'GOOG', 'TSLA', 'GM']
++company_names = get_company_names(symbols)
++print("Company Names:")
++for symbol, name in company_names.items():
++    print(f"{name}({symbol})")
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"d697f109-98c8-4ccd-9f46-4fb0f700379c\" name=\"Changes\" comment=\"Basic implementation of Stocker.py done. Stocker.py is able to recieve the api key and create a list of symbols form user input or csv symbol-files.\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/Stocker.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Stocker.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/setup.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/setup.py\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Python Script\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"PUSH_AUTO_UPDATE\" value=\"true\" />\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"GitHubPullRequestSearchHistory\">{\n  &quot;lastFilter&quot;: {\n    &quot;state&quot;: &quot;OPEN&quot;,\n    &quot;assignee&quot;: &quot;mosgus&quot;\n  }\n}</component>\n  <component name=\"GithubPullRequestsUISettings\">{\n  &quot;selectedUrlAndAccountId&quot;: {\n    &quot;url&quot;: &quot;https://github.com/mosgus/Stocker.git&quot;,\n    &quot;accountId&quot;: &quot;fd19dabb-a4f2-4b2a-bbfa-ce3329aae4d4&quot;\n  }\n}</component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 3\n}</component>\n  <component name=\"ProjectId\" id=\"2pigBXdnGrXMqO41d94suXyQsvt\" />\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\">\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\n  </component>\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"Python.Stocker.executor\": \"Run\",\n    \"Python.setup.executor\": \"Run\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"git-widget-placeholder\": \"main\",\n    \"last_opened_file_path\": \"/Users/gunnarbalch/PycharmProjects/Stocker/symbol_lists\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.detected.package.tslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"nodejs_package_manager_path\": \"npm\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/symbol_lists\" />\n    </key>\n  </component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23726.102\" />\n        <option value=\"bundled-python-sdk-5e1850174b45-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23726.102\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"d697f109-98c8-4ccd-9f46-4fb0f700379c\" name=\"Changes\" comment=\"\" />\n      <created>1733254174226</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1733254174226</updated>\n      <workItem from=\"1733254175293\" duration=\"6565000\" />\n      <workItem from=\"1733268472869\" duration=\"11965000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"Initial Setup\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1733254299189</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1733254299189</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"setup.py succesfully validates gpt api key\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1733275045413</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1733275045413</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"Basic implementation of Stocker.py done. Stocker.py is able to recieve the api key and create a list of symbols form user input or csv symbol-files.\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1733281792546</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1733281792546</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"4\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"Initial Setup\" />\n    <MESSAGE value=\"setup.py succesfully validates gpt api key\" />\n    <MESSAGE value=\"Basic implementation of Stocker.py done. Stocker.py is able to recieve the api key and create a list of symbols form user input or csv symbol-files.\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Basic implementation of Stocker.py done. Stocker.py is able to recieve the api key and create a list of symbols form user input or csv symbol-files.\" />\n  </component>\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\n    <SUITE FILE_PATH=\"coverage/Stocker$Stocker.coverage\" NAME=\"Stocker Coverage Results\" MODIFIED=\"1733281497594\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n    <SUITE FILE_PATH=\"coverage/Stocker$setup.coverage\" NAME=\"setup Coverage Results\" MODIFIED=\"1733282239901\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 62cc92a30c72a235f6cec5c10bb4b1e833f2c4c3)
++++ b/.idea/workspace.xml	(date 1733344755547)
+@@ -4,10 +4,13 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="d697f109-98c8-4ccd-9f46-4fb0f700379c" name="Changes" comment="Basic implementation of Stocker.py done. Stocker.py is able to recieve the api key and create a list of symbols form user input or csv symbol-files.">
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++    <list default="true" id="d697f109-98c8-4ccd-9f46-4fb0f700379c" name="Changes" comment="Removed duplicates from final list of symbols.">
++      <change afterPath="$PROJECT_DIR$/newsapiTEST.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/stockNameTESTER.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Stocker.py" beforeDir="false" afterPath="$PROJECT_DIR$/Stocker.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/symbol_lists/portfolio.csv" beforeDir="false" afterPath="$PROJECT_DIR$/symbol_lists/portfolio.csv" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/symbol_lists/portfolio2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/symbol_lists/portfolio2.csv" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -51,7 +54,9 @@
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+     "Python.Stocker.executor": "Run",
++    "Python.newsapiTEST.executor": "Run",
+     "Python.setup.executor": "Run",
++    "Python.stockNameTESTER.executor": "Run",
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+     "git-widget-placeholder": "main",
+     "last_opened_file_path": "/Users/gunnarbalch/PycharmProjects/Stocker/symbol_lists",
+@@ -85,7 +90,7 @@
+       <option name="presentableId" value="Default" />
+       <updated>1733254174226</updated>
+       <workItem from="1733254175293" duration="6565000" />
+-      <workItem from="1733268472869" duration="11965000" />
++      <workItem from="1733268472869" duration="24435000" />
+     </task>
+     <task id="LOCAL-00001" summary="Initial Setup">
+       <option name="closed" value="true" />
+@@ -111,7 +116,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1733281792546</updated>
+     </task>
+-    <option name="localTasksCounter" value="4" />
++    <task id="LOCAL-00004" summary="Removed duplicates from final list of symbols.">
++      <option name="closed" value="true" />
++      <created>1733282311125</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1733282311125</updated>
++    </task>
++    <option name="localTasksCounter" value="5" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -121,10 +134,13 @@
+     <MESSAGE value="Initial Setup" />
+     <MESSAGE value="setup.py succesfully validates gpt api key" />
+     <MESSAGE value="Basic implementation of Stocker.py done. Stocker.py is able to recieve the api key and create a list of symbols form user input or csv symbol-files." />
+-    <option name="LAST_COMMIT_MESSAGE" value="Basic implementation of Stocker.py done. Stocker.py is able to recieve the api key and create a list of symbols form user input or csv symbol-files." />
++    <MESSAGE value="Removed duplicates from final list of symbols." />
++    <option name="LAST_COMMIT_MESSAGE" value="Removed duplicates from final list of symbols." />
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
++    <SUITE FILE_PATH="coverage/Stocker$newsapiTEST.coverage" NAME="newsapiTEST Coverage Results" MODIFIED="1733344647919" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/Stocker$Stocker.coverage" NAME="Stocker Coverage Results" MODIFIED="1733281497594" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/Stocker$setup.coverage" NAME="setup Coverage Results" MODIFIED="1733282239901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Stocker$setup.coverage" NAME="setup Coverage Results" MODIFIED="1733343058149" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Stocker$stockNameTESTER.coverage" NAME="stockNameTESTER Coverage Results" MODIFIED="1733344621167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+   </component>
+ </project>
+\ No newline at end of file

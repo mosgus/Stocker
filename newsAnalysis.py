@@ -139,8 +139,6 @@ if __name__ == "__main__":
     with open(score_file, mode="w", newline="", encoding="utf-8") as scores_csv:
 
         score_writer = csv.writer(scores_csv)
-
-        # Write headers to both CSV files
         score_writer.writerow(["Stock", "TextBlob Score", "GPT Score", "GPT-Analysis"])
 
         # Fetch news for each company in the name list

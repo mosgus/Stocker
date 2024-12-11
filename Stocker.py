@@ -19,7 +19,7 @@ def get_symbols_from_user():
         return symbols
     return None
 
-def get_symbols_from_csv(directory="symbol_lists"):
+def get_symbols_from_csv(directory="portfolios"):
     """
     Collect all stock symbols from CSV files in the specified directory.
     Supports files with or without headers.
@@ -83,6 +83,7 @@ if __name__ == "__main__":
     time.sleep(0.5)
     print("Passing data to newsAnalysis.py...📰")
     news_Anal(gpt_key, newsapi_key, symbols)
-    print(f"\n🗞️News sentiment analysis for {symbols} has completed. 🗞")
+    print(f"🗞️News sentiment analysis for {symbols} has completed. 🗞\n")
     metrics_Anal(gpt_key, symbols)
+    print("\nThanks for using Stocker 📉👁️📈! Guten Tag!")
 
