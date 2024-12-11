@@ -8,10 +8,62 @@ import os
 print("\nRunning metricsAnalysis.py ↘️")
 time.sleep(0.5)
 
-def calculate_metrics(symbol, market_data, rf_rate, market_return):
+def gpt_risk_analysis(symbol, beta, sharpe_ratio, volatility, gpt_key):
     """
-    Calculates metrics such as CAPM Expected Return and Sharpe Ratio for a given stock.
-    Can be extended to calculate additional metrics.
+    Analyzes the stock's risk metrics using GPT API and provides a risk assessment score and analysis.
+    """
+    client = OpenAI(api_key=gpt_key)
+    try:
+        prompt = (
+            f"You are an expert financial analyst. Analyze the following risk metrics for the stock '{symbol}':\n"
+            f"- Beta: {beta}\n"
+            f"- Volatility: {volatility}\n"
+            f"- Sharpe Ratio: {sharpe_ratio}\n"
+            "Provide a short paragraph discussing the implications of these metrics. Discuss the stock's risk and return profile based on these metrics. "
+            "Finally, assign a 'risk score' between 1 (very low risk) and 5 (very high risk). "
+            "State this risk score on a new line and as the last output of your response."
+            "(ex: GPT Risk Score for NETGEAR, Inc.(NTGR): 2"
+        )
+
+        # Query GPT API
+        response = client.chat.completions.create(
+            model="gpt-4o-mini-2024-07-18",
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        if response and response.choices:
+            gpt_response = response.choices[0].message.content
+            return gpt_response
+        else:
+            return "Error: GPT did not return a response."
+    except Exception as e:
+        return f"Error querying GPT: {e}"
+
+def parse_gpt_response(gpt_response):
+    """
+    Parses GPT response to extract the analysis and risk score separately.
+    """
+    try:
+        # Extract Risk Score
+        risk_score = None
+        for line in reversed(gpt_response.splitlines()):
+            if "Risk Score" in line:  # Expected format: "Risk Score: <value>"
+                risk_score = int(line.split(":")[-1].strip())
+                break
+
+        # Remove "Risk Score" line from the analysis
+        cleaned_analysis = "\n".join(
+            line for line in gpt_response.splitlines() if "Risk Score" not in line
+        ).strip()
+
+        return cleaned_analysis, risk_score
+    except ValueError:
+        print("Error parsing GPT response. Returning None for risk score and cleaned analysis.")
+        return gpt_response, None
+
+def calculate_metrics(symbol, market_data, rf_rate, gpt_key):
+    """
+    Calculates metrics such as Beta, Sharpe Ratio, and Volatility for a given stock.
     """
     try:
         # Fetch historical data for the stock
@@ -24,32 +76,35 @@ def calculate_metrics(symbol, market_data, rf_rate, market_return):
             'Stock Return': stock_data['Daily Return'],
             'Market Return': market_data['Daily Return']
         }).dropna()
-        ''' RISK '''
 
         # Calculate Beta (Covariance / Variance)
         covariance = combined['Stock Return'].cov(combined['Market Return'])
         variance = combined['Market Return'].var()
-        beta = covariance / variance # Beta tells you about the stock’s exposure to market movements.
-        # CAPM Expected Return
-        capm_expected_return = rf_rate + beta * (market_return - rf_rate)
-        # Sharpe Ratio (Excess return / Standard deviation)
+        beta = covariance / variance
+
+        # Calculate Sharpe Ratio (Excess return / Standard deviation)
         avg_stock_return = combined['Stock Return'].mean() * 252  # Annualized return
         std_dev = combined['Stock Return'].std() * (252 ** 0.5)  # Annualized volatility
         sharpe_ratio = (avg_stock_return - rf_rate) / std_dev
-        ''' RISK '''
+
+        # Get GPT Risk Analysis
+        gpt_response = gpt_risk_analysis(symbol, round(beta, 4), round(sharpe_ratio, 4), round(std_dev, 4), gpt_key)
+        cleaned_analysis, risk_score = parse_gpt_response(gpt_response)
 
         # Return a dictionary of metrics
         return {
             "Symbol": symbol,
             "Beta": round(beta, 4),
-            "CAPM Expected Return": round(capm_expected_return, 4),
-            "Sharpe Ratio": round(sharpe_ratio, 4)
+            "Volatility": round(std_dev, 4),
+            "Sharpe Ratio": round(sharpe_ratio, 4),
+            "GPT Risk Score": risk_score,
+            "GPT Analysis": cleaned_analysis
         }
 
     except Exception as e:
         print(f"Error analyzing {symbol}: {e}")
         return {
-            "Symbol": symbol, "Beta": None, "CAPM Expected Return": None,"Sharpe Ratio": None
+            "Symbol": symbol, "Beta": None, "Volatility": None, "Sharpe Ratio": None, "GPT Risk Score": None, "GPT Analysis": None
         }
 
 if __name__ == "__main__":
@@ -75,9 +130,12 @@ if __name__ == "__main__":
     metrics_list = []
     for symbol in symbols:
         print(f"\nAnalyzing metrics for {symbol}...")
-        metrics = calculate_metrics(symbol, sp500_data, rf_rate, market_return)
-        metrics_list.append(metrics)
+        metrics = calculate_metrics(symbol, sp500_data, rf_rate, gpt_key)
+
+        # Display shortened GPT Analysis in console
         print(f"Metrics for {symbol}: {metrics}")
+
+        metrics_list.append(metrics)
 
     # Save metrics to CSV
     os.makedirs("analysis", exist_ok=True)
