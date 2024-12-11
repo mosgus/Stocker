@@ -13,9 +13,9 @@ It's recommended to use ' grit apply openai ' for migrating the code effectively
 
 ### How to Run
 Either simply run setup.py and provide api keys when prompted or run setup.py with the keys as command-line arguments.
-```bash
-python setup.py
-OR
-python setup.py <chatGPT API key> <NewsAPI key>
-```
+- Example:
+  ```bash
+  python setup.py
+  python setup.py <chatGPT API key> <NewsAPI key>
+  ```
 
