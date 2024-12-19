@@ -3,7 +3,7 @@ A Python-based stock portfolio evaluator that combines financial analysis, senti
 
 ### Features
 - Interface: Users use Stocker through the console commandline arguments. A web-interface will implemented in the future.
-    - Bro
+    - Users can store portfolio csv files in the /porfolios directory. Stocker will scan csv files in /porfolios if users choose to analyze a list of stocks that they provide.
 - Gay:
 - Fat:
 - Cool:
