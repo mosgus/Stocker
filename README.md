@@ -11,6 +11,10 @@ A Python-based stock portfolio evaluator that combines financial analysis, senti
         - ChatGPT analyzes a stock's articles as a whole, providing a paragraph synopsis explaining general sentiment, it then provides a sentiment score.
         - Sentiment Scores for both TextBlob and ChatGPT can range from -5(very negative sentiment) to +5(very positive sentiment).
 - **Financial Metrics Analysis**:
+    - YFinance aggregates necessary metrics for each stock. ChatGPT analyzes calculated variables and returns analysis on the metrics: providing a synopsis and a relevant score. The analysis and scores get saved as a csv file.
+        - Current version only provides *Risk Analysis* for each Stock.
+            - Beta, Volatility, and Sharpe Ratio are calculated and then analyzed.
+            - ChatGPT's analysis provides a discussion over the implications of each metric and assesses a 'Risk Score'.
           
 
 
