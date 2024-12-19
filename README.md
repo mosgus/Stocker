@@ -3,7 +3,7 @@ A Python-based stock portfolio evaluator that combines financial analysis, senti
 
 ### Features
 - Interface: Users use Stocker through the console commandline arguments. A web-interface will implemented in the future.
-- -YO
+    - 
 - Gay:
 - Fat:
 - Cool:
