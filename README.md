@@ -5,6 +5,8 @@ A Python-based stock portfolio evaluator that combines financial analysis, senti
 - **Interface**:
     - Users use Stocker through console commandline arguments. A web-interface will implemented in the future.
         - Users can store portfolio csv files in the /porfolios directory. Stocker will scan csv files in /porfolios if users DON'T provide a portfolio via commandline inputs.
+- **LLM-Driven Analysis**:
+    - Leverages OpenAI's GPT API for detailed analysis and reporting.
 - **Sentiment Analysis**:
     - NewsAPI aggregates recent and relevant articles pertaining to each stock's sentiment. A 'Sentiment Score' is assessed to each stock based on the overall sentiment expressed from all the articles. Both TextBlob and chatGPT are used to grade sentiment. Scores get saved as a csv file.
         - TextBlob's sentiment score is used as a baseline to compare with chatGPT's sentiment score.
