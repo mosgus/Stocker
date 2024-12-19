@@ -9,7 +9,8 @@ A Python-based stock portfolio evaluator that combines financial analysis, senti
     - NewsAPI aggregates recent and relevant articles pertaining to each stock's sentiment. A 'Sentiment Score' is assessed to each stock based on the overall sentiment expressed from all the articles. Both TextBlob and chatGPT are used to grade sentiment. Scores get saved as a csv file.
         - TextBlob's sentiment score is used as a baseline to compare with chatGPT's sentiment score.
         - ChatGPT analyzes a stock's articles as a whole, providing a paragraph synopsis explaining general sentiment, it then provides a sentiment score.
-        - Sentiment Scores for both TextBlob and ChatGPT can range from -5(very negative sentiment) to +5(very positive sentiment)
+        - Sentiment Scores for both TextBlob and ChatGPT can range from -5(very negative sentiment) to +5(very positive sentiment).
+- **Financial Metrics Analysis**:
           
 
 
