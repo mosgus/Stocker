@@ -1,8 +1,9 @@
 # Stocker 📉👁️📈
 A Python-based stock portfolio evaluator that combines financial analysis, sentiment analysis, and a large language model (chatGPT) to provide actionable insights for investors. Developed by Gunnar Balch, Stocker integrates APIs such as OpenAI GPT, NewsAPI, and YFinance to fetch relevant data, analyze metrics, and generate detailed stock evaluation reports.
 
-## Features
-- Flexible:
+### Features
+- Interface: Users use Stocker through the console commandline arguments. A web-interface will implemented in the future.
+-  -  yayayaha
 - Gay:
 - Fat:
 - Cool:
