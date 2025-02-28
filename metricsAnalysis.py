@@ -93,8 +93,8 @@ def calculate_metrics(symbol, market_data, rf_rate, gpt_key):
         sharpe_ratio = (avg_stock_return - rf_rate) / std_dev
 
         # Get GPT Risk Analysis
-        gpt_response = gpt_risk_analysis(symbol, round(beta, 4), round(sharpe_ratio, 4), round(std_dev, 4), gpt_key)
-        cleaned_analysis, risk_score = parse_gpt_response(gpt_response)
+        gpt_risk_response = gpt_risk_analysis(symbol, round(beta, 4), round(sharpe_ratio, 4), round(std_dev, 4), gpt_key)
+        cleaned_risk_anal, risk_score = parse_gpt_response(gpt_risk_response)
 
         # Return a dictionary of metrics
         return {
@@ -103,7 +103,7 @@ def calculate_metrics(symbol, market_data, rf_rate, gpt_key):
             "Volatility": round(std_dev, 4),
             "Sharpe Ratio": round(sharpe_ratio, 4),
             "GPT Risk Score": risk_score,
-            "GPT Analysis": cleaned_analysis
+            "GPT Risk Analysis": cleaned_risk_anal
         }
 
     except Exception as e:
@@ -137,7 +137,8 @@ if __name__ == "__main__":
         print(f"\nAnalyzing metrics for {symbol}...")
         metrics = calculate_metrics(symbol, sp500_data, rf_rate, gpt_key)
         metrics_list.append(metrics)
-        # Display metrics
+
+        '''Display metrics'''
         relevant_metrics = {
             "Symbol": metrics["Symbol"],
             "Beta": metrics["Beta"],
@@ -146,7 +147,7 @@ if __name__ == "__main__":
             "GPT Risk Score": metrics["GPT Risk Score"]
         }
         print(f"📊Metrics for {symbol}: {relevant_metrics}")
-        print(f"🤖GPT Analysis for {symbol}: {metrics['GPT Analysis']}")
+        print(f"🤖GPT Risk Analysis for {symbol}: {metrics['GPT Risk Analysis']}")
     # Save metrics to CSV
     os.makedirs("analysis", exist_ok=True)
     output_file = "analysis/metricsAnalysis.csv"

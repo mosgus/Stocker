@@ -6,8 +6,12 @@ To run properly you must provide api keys for chatGPT and NewsAPI
 ```bash
 pip install openai
 pip install newsapi-python
+pip install yfinance --upgrade --no-cache-dir 
 ```
-- Be aware, using ' openai migrate ' may cause issues depending on your OS. 
+- yfinance seeks to limit queries with every update, making older versions redundant. 
+- Using the pip install above removes redundant versions and installs working ones.
+- I may migrate from yfinance to another alternative like Alpha Vantage, Tiingo, or Bloomberg.
+- Be aware, using 'openai migrate' may cause issues depending on your OS. 
 It's recommended to use ' grit apply openai ' for migrating the code effectively.
 
 

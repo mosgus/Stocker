@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d697f109-98c8-4ccd-9f46-4fb0f700379c" name="Changes" comment="Implemented news analysis saving. GPT analysis for each stock gets saved into a csv file called newsAnal.csv.">
+    <list default="true" id="d697f109-98c8-4ccd-9f46-4fb0f700379c" name="Changes" comment="Refinements done on metricsAnalysis.py. More consitent and correct responses from gpt api.">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_4_24,_3_40 PM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_4_24,_5_12 PM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_4_24__3_40PM__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_4_24__5_12PM__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/newsAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/newsAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/metricsAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/metricsAnalysis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +55,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Python.Stocker.executor&quot;: &quot;Run&quot;,
+    &quot;Python.metricsTEST.executor&quot;: &quot;Run&quot;,
     &quot;Python.newsapiTEST.executor&quot;: &quot;Run&quot;,
     &quot;Python.setup.executor&quot;: &quot;Run&quot;,
     &quot;Python.stockNameTESTER.executor&quot;: &quot;Run&quot;,
@@ -91,6 +96,9 @@
       <workItem from="1733425774567" duration="90000" />
       <workItem from="1733696793888" duration="305000" />
       <workItem from="1733697113645" duration="22887000" />
+      <workItem from="1733861372966" duration="30558000" />
+      <workItem from="1734566863415" duration="4967000" />
+      <workItem from="1740698599555" duration="1954000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Setup">
       <option name="closed" value="true" />
@@ -204,7 +212,47 @@
       <option name="project" value="LOCAL" />
       <updated>1733791487697</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Modified News Analysis to save to just one csv file. Also changed the gpt model to gpt-40-mini-2024-07-18.">
+      <option name="closed" value="true" />
+      <created>1733862954249</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1733862954249</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Setup basic imlpementation for metricsAnalysis.py.">
+      <option name="closed" value="true" />
+      <created>1733869286151</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1733869286151</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Implememented basic Risk metrics calculations.">
+      <option name="closed" value="true" />
+      <created>1733877072102</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1733877072102</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Implemented basic GPT api analysis of stock risk.">
+      <option name="closed" value="true" />
+      <created>1733883953601</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1733883953601</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Refinements done on metricsAnalysis.py. More consitent and correct responses from gpt api.">
+      <option name="closed" value="true" />
+      <created>1733887346406</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1733887346406</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -225,12 +273,18 @@
     <MESSAGE value="Included article descriptions into the News Sentiment outputs as well as into the GPT queries for more precise analysis." />
     <MESSAGE value="Implemented score saving. TextBlob and GPT sentiment scores for each stock get saved into a csv file called newsScores.csv." />
     <MESSAGE value="Implemented news analysis saving. GPT analysis for each stock gets saved into a csv file called newsAnal.csv." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented news analysis saving. GPT analysis for each stock gets saved into a csv file called newsAnal.csv." />
+    <MESSAGE value="Modified News Analysis to save to just one csv file. Also changed the gpt model to gpt-40-mini-2024-07-18." />
+    <MESSAGE value="Setup basic imlpementation for metricsAnalysis.py." />
+    <MESSAGE value="Implememented basic Risk metrics calculations." />
+    <MESSAGE value="Implemented basic GPT api analysis of stock risk." />
+    <MESSAGE value="Refinements done on metricsAnalysis.py. More consitent and correct responses from gpt api." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refinements done on metricsAnalysis.py. More consitent and correct responses from gpt api." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Stocker$newsapiTEST.coverage" NAME="newsapiTEST Coverage Results" MODIFIED="1733351173820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Stocker$Stocker.coverage" NAME="Stocker Coverage Results" MODIFIED="1733281497594" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Stocker$setup.coverage" NAME="setup Coverage Results" MODIFIED="1733700439187" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Stocker$metricsTEST.coverage" NAME="metricsTEST Coverage Results" MODIFIED="1733872081045" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Stocker$setup.coverage" NAME="setup Coverage Results" MODIFIED="1733862023115" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Stocker$stockNameTESTER.coverage" NAME="stockNameTESTER Coverage Results" MODIFIED="1733347870152" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
